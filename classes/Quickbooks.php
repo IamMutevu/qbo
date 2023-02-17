@@ -1,5 +1,4 @@
 <?php
-namespace QBO;
 
 class Quickbooks{
     public function __construct(){

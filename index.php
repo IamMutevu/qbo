@@ -1,7 +1,5 @@
 <?php
 
-use QBO\Quickbooks;
-
 require 'vendor/autoload.php';
 require 'classes/Quickbooks.php';
 require 'classes/Authentication.php';
@@ -22,5 +20,5 @@ $qbo = new Quickbooks();
 // echo $qbo->getAuthUrl();
 
 if(isset($params['code']) && isset($params['realmId'])){
-    Authentication::getAccessToken($code, $realmId, '276');
+    Authentication::getAccessToken($params['code'], $params['realmId'], '276');
 }
