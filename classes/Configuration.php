@@ -1,5 +1,7 @@
 <?php
 
+namespace QBO;
+
 class Configuration{
     public static function configure(){
         if(file_exists($_SERVER['DOCUMENT_ROOT'].'/qbo/config.json')){
@@ -10,6 +12,7 @@ class Configuration{
             define("CLIENT_SECRET", $configs->client_secret);
             define("REDIRECT_URI", $configs->redirect_uri);
             define("SCOPE", $configs->scope);
+            define("BASE_URL", $configs->base_url);
             define("SERVER_NAME", $configs->server_name);
             define("DATABASE", $configs->database);
             define("DB_USER", $configs->db_user);
