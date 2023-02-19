@@ -3,6 +3,7 @@
 require 'Configuration.php';
 
 use QuickBooksOnline\API\DataService\DataService;
+use QuickBooksOnline\API\Core\OAuth\OAuth2\OAuth2LoginHelper;
 
 Configuration::configure();
 require 'DatabaseConnection.php';
@@ -28,6 +29,20 @@ class Authentication{
         );
 
         self::storeAccessToken($user_id, json_encode($access_token));
+    }
+
+    public static function revokeAccessToken(){
+        $access_token = json_decode(self::retrieveAccessToken()->access_token);
+
+        //The first parameter of OAuth2LoginHelper is the ClientID, second parameter is the client Secret
+        $oauth2LoginHelper = new OAuth2LoginHelper(CLIENT_ID,  CLIENT_SECRET);
+        
+        $revokeResult = $oauth2LoginHelper->revokeToken($access_token['refresh_token']);
+        
+        if($revokeResult){
+            // Update token state to revoked
+            echo "RefreshToken Token revoked.";
+        }
     }
 
     public static function retrieveAccessToken(){
