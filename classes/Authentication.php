@@ -55,8 +55,8 @@ class Authentication{
 
     private function storeAccessToken($user_id, $access_token){
         $connection = DatabaseConnection::connect();
-        $query = $connection->prepare("INSERT INTO `access_tokens`(token, user_id, app, created_at, updated_at) VALUES(?, ?, ?, ?, ?)");
-        $query->execute(array($access_token, $user_id, APP, date("d-m-Y H:i"), date("d-m-Y H:i")));
+        $query = $connection->prepare("INSERT INTO `access_tokens`(token, user_id, app, state, created_at, updated_at, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?)");
+        $query->execute(array($access_token, $user_id, APP, "active", date("d-m-Y H:i"), date("d-m-Y H:i"), time()));
         $connection = null;
     }
 
