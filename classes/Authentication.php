@@ -41,14 +41,17 @@ class Authentication{
         
         if($revokeResult){
             // Update token state to revoked
-            echo "RefreshToken Token revoked.";
+            $connection = DatabaseConnection::connect();
+            $query = $connection->prepare("UPDATE `access_tokens` SET state = ?, updated_at = ? WHERE app = ? ");
+            $query->execute(array("revoked", date("d-m-Y H:i"), APP));
+            $connection = null;
         }
     }
 
     public static function retrieveAccessToken(){
         $connection = DatabaseConnection::connect();
-        $query = $connection->prepare("SELECT access_tokens.token, access_tokens.updated_at  FROM access_tokens WHERE app = ?");
-        $query->execute(array(APP));
+        $query = $connection->prepare("SELECT access_tokens.token, access_tokens.updated_at FROM access_tokens WHERE app = ? AND state = ? ORDER BY id DESC");
+        $query->execute(array(APP, "active"));
         $connection = null;
         return $query->fetch(PDO::FETCH_OBJ);
     }
