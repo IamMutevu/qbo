@@ -26,6 +26,7 @@ class Authentication{
         $access_token = array(
             'access_token' => $accessTokenObj->getAccessToken(),
             'refresh_token' => $accessTokenObj->getRefreshToken(),
+            'realmId' => $realmId
         );
 
         self::storeAccessToken($user_id, json_encode($access_token));
@@ -63,6 +64,7 @@ class Authentication{
         $connection = null;
     }
 
+
     private static function updateStoredAccessToken($access_token){
         $connection = DatabaseConnection::connect();
         $query = $connection->prepare("UPDATE `access_tokens` SET token = ?, updated_at = ? WHERE app = ? ");
@@ -83,15 +85,44 @@ class Authentication{
         return $dataService;
     }
 
-    private static function getAuthenticatedDataService(){
-        $dataService = DataService::Configure(array(
-            'auth_mode' => AUTH_MODE,
-            'ClientID' => CLIENT_ID,
-            'ClientSecret' => CLIENT_SECRET,
-            'RedirectURI' => REDIRECT_URI,
-            'scope' => SCOPE,
-            'baseUrl' => BASE_URL
-        ));
+    public static function getAuthenticatedDataService(){
+        $access_token_object = json_decode(self::retrieveAccessToken());
+        $elapsed_time = time() - strotime($access_token_object['updated_at']);
+        
+
+        if($elapsed_time >= 3600){
+            $dataService = DataService::Configure(array(
+                'auth_mode' => AUTH_MODE,
+                'ClientID' => CLIENT_ID,
+                'ClientSecret' => CLIENT_SECRET,
+                'refreshTokenKey' => $access_token_object['refresh_token'],
+                'QBORealmID' => $access_token_object['realmId'],
+                'baseUrl' => BASE_URL
+            ));
+
+            $OAuth2LoginHelper = $dataService->getOAuth2LoginHelper();
+            $refreshedAccessTokenObj = $OAuth2LoginHelper->refreshToken();
+            $error = $OAuth2LoginHelper->getLastError();
+            
+            if($error){
+
+            }
+            else{
+              //Refresh Token is called successfully
+              $dataService->updateOAuth2Token($refreshedAccessTokenObj);
+            }
+        }
+        else{
+            $dataService = DataService::Configure(array(
+                'auth_mode' => AUTH_MODE,
+                'ClientID' => CLIENT_ID,
+                'ClientSecret' => CLIENT_SECRET,
+                'accessTokenKey' => $access_token_object['access_token'],
+                'refreshTokenKey' => $access_token_object['refresh_token'],
+                'QBORealmID' => $access_token_object['realmId'],
+                'baseUrl' => BASE_URL
+            ));
+        }
 
         return $dataService;
     }
