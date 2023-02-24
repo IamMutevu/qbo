@@ -2,6 +2,9 @@
 
 class DatabaseConnection{
 	public static function connect(){
+		require_once 'Configuration.php';
+		Configuration::configure();
+
 		$servername = SERVER_NAME;
 		$username = DB_USER;
 		$password = DB_PASSWORD;
