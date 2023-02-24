@@ -41,6 +41,8 @@ include $_SERVER['DOCUMENT_ROOT'].'/qbo/index.php';
                     }
                     ?>
                     
+                    <a href="test.php" class="btn btn-primary btn-block">Add customer</a>
+
                 </div>
             </div>
         </div>
