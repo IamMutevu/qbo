@@ -34,7 +34,7 @@ class Quickbooks{
     }
 
     public function addPayment($data){
-        $customer = $this->getCustomerLink($id);
+        $customer = $this->getCustomerLink($data['customer']['id']);
         if($customer){
             $api_customer_id = $customer->api_customer_id;
         }
