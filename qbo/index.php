@@ -24,7 +24,7 @@ $qbo = new Quickbooks();
 
 try {
     if(isset($params['code']) && isset($params['realmId'])){
-        Authentication::getAccessToken($params['code'], $params['realmId'], '276');
+        Authentication::getAccessToken($params['code'], $params['realmId'], $user_id);
     }
 } 
 catch (Exception $e) {

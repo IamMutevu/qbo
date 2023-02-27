@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'].'/qbo/index.php';
+include $_SERVER['DOCUMENT_ROOT'].'/qbo/qbo/index.php';
 ?>
 
 <!doctype html>

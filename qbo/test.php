@@ -1,7 +1,7 @@
 <?php
 // include $_SERVER['DOCUMENT_ROOT'].'/qbo/index.php';
 
-require 'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 use QuickBooksOnline\API\DataService\DataService;
 use QuickBooksOnline\API\Core\Http\Serialization\XmlObjectSerializer;
@@ -22,11 +22,11 @@ if (!empty($_POST)) {
 try {
     $dataService = DataService::Configure(array(
         'auth_mode' => 'oauth2',
-        'ClientID' => "ABtJcXZSsRvc8To63FdSLJGlXSM5BIMhqJEVHhos4NITtEEtP6",
-        'ClientSecret' => "tJRGvHQ9o38eWz9TnfMkbiMZN20x04RlqteDUdm9",
-        'RedirectURI' => "https://4af8-102-2-154-5.in.ngrok.io/qbo/test.php",
+        'ClientID' => "ABk8akGQ1Cw6KbwFW0Ps89yNqRM6ImAH32ydBFKgsXzg7h0sSS",
+        'ClientSecret' => "6I73lIu393kNtRd46ESfLywdnXQ3vxU26KbuwG29",
+        'RedirectURI' => "http://localhost/qbo/dashboard.php",
         'scope' => "com.intuit.quickbooks.accounting",
-        'baseUrl' => "Production"
+        'baseUrl' => "Development"
     ));
 
     $OAuth2LoginHelper = $dataService->getOAuth2LoginHelper();
@@ -35,12 +35,12 @@ try {
 
     $dataService = DataService::Configure(array(
         'auth_mode' => 'oauth2',
-        'ClientID' => "ABtJcXZSsRvc8To63FdSLJGlXSM5BIMhqJEVHhos4NITtEEtP6",
-        'ClientSecret' => "tJRGvHQ9o38eWz9TnfMkbiMZN20x04RlqteDUdm9",
+        'ClientID' => "ABk8akGQ1Cw6KbwFW0Ps89yNqRM6ImAH32ydBFKgsXzg7h0sSS",
+        'ClientSecret' => "6I73lIu393kNtRd46ESfLywdnXQ3vxU26KbuwG29",
         'accessTokenKey' => $accessTokenObj->getAccessToken(),
         'refreshTokenKey' => $accessTokenObj->getRefreshToken(),
         'QBORealmID' => $params['realmId'],
-        'baseUrl' => "Production"
+        'baseUrl' => "Development"
     ));
 
     $dataService->setLogLocation("qbo-log");

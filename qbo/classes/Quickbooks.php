@@ -21,8 +21,16 @@ class Quickbooks{
         }
     }
 
+    public function testAuth(){
+        Authentication::getAuthenticatedDataService();
+    }
+
     public function addCustomer($data){
         QBOCustomer::addCustomer($data);
+    }
+
+    public function getCustomerById($id){
+        QBOCustomer::getCustomerById($id);
     }
 
     public function addPayment(){

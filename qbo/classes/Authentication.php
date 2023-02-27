@@ -57,7 +57,7 @@ class Authentication{
         return $query->fetch(PDO::FETCH_OBJ);
     }
 
-    private function storeAccessToken($user_id, $access_token){
+    private static function storeAccessToken($user_id, $access_token){
         $connection = DatabaseConnection::connect();
         $query = $connection->prepare("INSERT INTO `access_tokens`(token, user_id, app, state, created_at, updated_at, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?)");
         $query->execute(array($access_token, $user_id, APP, "active", date("d-m-Y H:i"), date("d-m-Y H:i"), time()));
@@ -89,30 +89,34 @@ class Authentication{
         $access_token_record = self::retrieveAccessToken();
         $access_token_object = json_decode($access_token_record->token);
         $elapsed_time = time() - strtotime($access_token_record->updated_at);
-        
+
 
         if($elapsed_time >= 3600){
+
+            //The first parameter of OAuth2LoginHelper is the ClientID, second parameter is the client Secret
+            $oauth2LoginHelper = new OAuth2LoginHelper(CLIENT_ID, CLIENT_SECRET);
+            $accessTokenObj = $oauth2LoginHelper->
+                                refreshAccessTokenWithRefreshToken($access_token_object->refresh_token);
+            
+            $access_token = array(
+                'access_token' => $accessTokenObj->getAccessToken(),
+                'refresh_token' => $accessTokenObj->getRefreshToken(),
+                'realmId' => $access_token_object->realmId
+            );
+
+            self::updateStoredAccessToken(json_encode($access_token));
+
             $dataService = DataService::Configure(array(
                 'auth_mode' => AUTH_MODE,
                 'ClientID' => CLIENT_ID,
                 'ClientSecret' => CLIENT_SECRET,
-                'accessTokenKey' => $access_token_object->access_token,
-                'refreshTokenKey' => $access_token_object->refresh_token,
+                'accessTokenKey' => $accessTokenObj->getAccessToken(),
+                'refreshTokenKey' => $accessTokenObj->getRefreshToken(),
                 'QBORealmID' => $access_token_object->realmId,
                 'baseUrl' => BASE_URL
             ));
-
-            $OAuth2LoginHelper = $dataService->getOAuth2LoginHelper();
-            $refreshedAccessTokenObj = $OAuth2LoginHelper->refreshToken();
-            $error = $OAuth2LoginHelper->getLastError();
             
-            if($error){
-
-            }
-            else{
-              //Refresh Token is called successfully
-              $dataService->updateOAuth2Token($refreshedAccessTokenObj);
-            }
+            echo "Here";
         }
         else{
             $dataService = DataService::Configure(array(
@@ -124,9 +128,11 @@ class Authentication{
                 'QBORealmID' => $access_token_object->realmId,
                 'baseUrl' => BASE_URL
             ));
+            
+            echo "There";
         }
 
-        $dataService->throwExceptionOnError(true);
+        // $dataService->throwExceptionOnError(true);
         return $dataService;
     }
 }
