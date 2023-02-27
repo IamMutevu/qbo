@@ -58,12 +58,23 @@
                 </tr>
             </thead>
             <tbody>
+                <?php
+                    $connection = DatabaseConnection::connect();
+                    $query = $connection->prepare("SELECT * FROM clients ORDER BY id DESC");
+                    $query->execute(array());
+                    $customers = $query->fetchAll(PDO::FETCH_OBJ);
+                    foreach($customers as $customer){
+                ?>
                 <tr>
                     <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <td><?=$customer->client_fname?></td>
+                    <td><?=$customer->client_phone?></td>
+                    <td><?=$customer->client_email?></td>
                 </tr>
+                <?
+                    }
+                ?>
+
             </tbody>
         </table>
     </div>
