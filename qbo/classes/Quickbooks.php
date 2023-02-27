@@ -33,7 +33,23 @@ class Quickbooks{
         QBOCustomer::getCustomerById($id);
     }
 
-    public function addPayment(){
-        
+    public function addPayment($data){
+        $customer = $this->getCustomerLink($id);
+        if($customer){
+            $api_customer_id = $customer->api_customer_id;
+        }
+        else{
+            $api_customer_id = QBOCustomer::addCustomer($data['customer']);
+        }
+
+        QBOPayment::addPayment($data['payment'], $api_customer_id);
+    }
+
+    private function getCustomerLink($id){
+        $connection = DatabaseConnection::connect();
+        $query = $connection->prepare("SELECT api_customer_id FROM apis_customer_link WHERE app = ? AND client_id = ? LIMIT 1");
+        $query->execute(array(APP, "active"));
+        $connection = null;
+        return $query->fetch(PDO::FETCH_OBJ);
     }
 }
