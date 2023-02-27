@@ -35,6 +35,7 @@ class QBOCustomer{
 			]);	
 	
 			$resultObj = $dataService->Add($customerToCreate);
+			self::linkCustomerRecord($customer->id, $resultObj->Id);
 			return $resultObj->Id;
 		} 
 		catch (\Throwable $th) {
@@ -58,6 +59,13 @@ class QBOCustomer{
 			echo $xmlBody . "\n";
 		}
 
+	}
+
+	private static function linkCustomerRecord($client_id, $api_customer_id){
+        $connection = DatabaseConnection::connect();
+        $query = $connection->prepare("INSERT INTO `apis_customer_link`(client_id, api_customer_id, app, created_at, updated_at, timestamp) VALUES(?, ?, ?, ?, ?)");
+        $query->execute(array($client_id, $api_customer_id, APP, date("d-m-Y H:i"), date("d-m-Y H:i"), time()));
+        $connection = null;
 	}
 
 	private static function validateCustomerData($data){
