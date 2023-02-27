@@ -2,7 +2,7 @@
 
 require 'Authentication.php';
 
-class Invoice{
+class QBOInvoice{
 	public static function addInvoice(){
 		$dataService = Authentication::getAuthenticatedDataService();
 
