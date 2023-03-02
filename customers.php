@@ -64,10 +64,17 @@
                     $query->execute(array());
                     $customers = $query->fetchAll(PDO::FETCH_OBJ);
                     foreach($customers as $customer){
+                        $query = $connection->prepare("SELECT * FROM apis_customer_link WHERE client_id = ?");
+                        $query->execute(array($customer->id));
+                        $record = $query->fetch(PDO::FETCH_OBJ); 
+                        $badge = '';
+                        if($record){
+                            $badge = "<span class='badge badge-success badge-pill'>Linked</span>";
+                        }   
                 ?>
                 <tr>
                     <th scope="row">1</th>
-                    <td><?=$customer->client_fname?></td>
+                    <td><?=$customer->client_fname?> <?=$badge?></td>
                     <td><?=$customer->client_phone?></td>
                     <td><?=$customer->client_email?></td>
                 </tr>
