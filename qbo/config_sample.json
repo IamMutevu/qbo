@@ -1,5 +1,6 @@
 {
     "app": "qbo",
+    "path": "",
     "auth_mode": "",
     "client_id": "",
     "client_secret": "",

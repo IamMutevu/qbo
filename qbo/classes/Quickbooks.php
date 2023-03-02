@@ -26,7 +26,7 @@ class Quickbooks{
     }
 
     public function addCustomer($data){
-        QBOCustomer::addCustomer($data);
+        return QBOCustomer::addCustomer($data);
     }
 
     public function getCustomerById($id){
@@ -43,6 +43,10 @@ class Quickbooks{
         }
 
         QBOPayment::addPayment($data['payment'], $api_customer_id);
+    }
+
+    public function testPayment($data, $api_customer_id){
+        QBOPayment::addPayment($data, $api_customer_id);
     }
 
     private function getCustomerLink($id){

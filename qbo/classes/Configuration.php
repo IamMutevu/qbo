@@ -8,6 +8,9 @@ class Configuration{
             if(!defined("APP")){
                 define("APP", $configs->app);
             }
+            if(!defined("PATH")){
+                define("PATH", $configs->path);
+            }
             if(!defined("AUTH_MODE")){
                 define("AUTH_MODE", $configs->auth_mode);
             }

@@ -20,13 +20,15 @@ $customer = array(
     'company_name' => '',
 );
 
-// $qbo->addCustomer($customer);
+
 
 $connection = DatabaseConnection::connect();
 $query = $connection->prepare("INSERT INTO `clients`(client_fname, client_phone, client_email, client_city, client_postal_code, client_street, created_at, updated_at, timestamp) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
 $query->execute(array($customer['name'], $customer['phone'], $customer['email'], $customer['city'], $customer['postal_code'], $customer['line'], date("d-m-Y H:i"), date("d-m-Y H:i"), time()));
-$connection = null;
 
-if($query){
+$customer['id'] = $connection->lastInsertId();
+
+
+if($query && $qbo->addCustomer($customer)){
     header('Location: dashboard.php?success=Customer added successfully');
 }

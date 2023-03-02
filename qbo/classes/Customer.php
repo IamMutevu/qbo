@@ -1,4 +1,5 @@
 <?php
+require $_SERVER['DOCUMENT_ROOT'].'/'.PATH.'/models/CustomerObj.php';
 
 use QuickBooksOnline\API\Facades\Customer;
 use QuickBooksOnline\API\Core\Http\Serialization\XmlObjectSerializer;
@@ -35,8 +36,14 @@ class QBOCustomer{
 			]);	
 	
 			$resultObj = $dataService->Add($customerToCreate);
-			self::linkCustomerRecord($customer->id, $resultObj->Id);
-			return $resultObj->Id;
+			if($resultObj){
+				self::linkCustomerRecord($customer->id, $resultObj->Id);
+				return $resultObj->Id;
+			}
+			else{
+				$error = $dataService->getLastError();
+				throw new Exception("Customer not created. Error: ".json_encode($error));
+			}
 		} 
 		catch (\Throwable $th) {
 			error_log($th->getMessage());
@@ -63,12 +70,13 @@ class QBOCustomer{
 
 	private static function linkCustomerRecord($client_id, $api_customer_id){
         $connection = DatabaseConnection::connect();
-        $query = $connection->prepare("INSERT INTO `apis_customer_link`(client_id, api_customer_id, app, created_at, updated_at, timestamp) VALUES(?, ?, ?, ?, ?)");
+        $query = $connection->prepare("INSERT INTO `apis_customer_link`(client_id, api_customer_id, app, created_at, updated_at, timestamp) VALUES(?, ?, ?, ?, ?, ?)");
         $query->execute(array($client_id, $api_customer_id, APP, date("d-m-Y H:i"), date("d-m-Y H:i"), time()));
         $connection = null;
 	}
 
 	private static function validateCustomerData($data){
-		return json_decode(json_encode($data));
+		$customer = new CustomerObj($data);
+		return $customer;
 	}
 }

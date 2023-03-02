@@ -115,8 +115,7 @@ class Authentication{
                 'QBORealmID' => $access_token_object->realmId,
                 'baseUrl' => BASE_URL
             ));
-            
-            echo "Here";
+
         }
         else{
             $dataService = DataService::Configure(array(
@@ -128,8 +127,7 @@ class Authentication{
                 'QBORealmID' => $access_token_object->realmId,
                 'baseUrl' => BASE_URL
             ));
-            
-            echo "There";
+
         }
 
         // $dataService->throwExceptionOnError(true);

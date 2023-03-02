@@ -4,8 +4,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require 'vendor/autoload.php';
-require 'classes/Quickbooks.php';
 require 'classes/Authentication.php';
+require 'classes/Quickbooks.php';
+
 
 use QuickBooksOnline\API\DataService\DataService;
 use QuickBooksOnline\API\Facades\Customer;

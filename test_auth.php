@@ -2,4 +2,4 @@
 
 include 'session_head.php';
 
-$qbo->getCustomerById('64');
+$qbo->addPayment('64');
