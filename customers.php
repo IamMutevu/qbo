@@ -22,26 +22,26 @@
             </div>
             <div class="form-group">
                 <label>Street</label>
-                <input type="text" class="form-control" name="street" required>
+                <input type="text" class="form-control" name="street">
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label>Postal Code</label>
-                    <input type="text" class="form-control" name="postal_code" required>
+                    <input type="text" class="form-control" name="postal_code">
                 </div>
                 <div class="form-group col-md-6">
                     <label>City</label>
-                    <input type="text" class="form-control" name="city" required>
+                    <input type="text" class="form-control" name="city">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label>Country Code</label>
-                    <input type="text" class="form-control" name="country_code" required>
+                    <input type="text" class="form-control" name="country_code">
                 </div>
                 <div class="form-group col-md-6">
                     <label>Country</label>
-                    <input type="text" class="form-control" name="country" required>
+                    <input type="text" class="form-control" name="country">
                 </div>
             </div>
             <button type="submit" class="btn btn-primary btn-block">Submit</button>

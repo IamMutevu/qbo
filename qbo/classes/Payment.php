@@ -13,15 +13,25 @@ class QBOPayment{
                 [
                     "value" => $customer_id
                 ],
-                "TotalAmt" => $data->amount,
-              ]);
-    
-              $resultingObj = $dataService->Add($theResourceObj);
-              $error = $dataService->getLastError();
-              return $resultingObj;
+                "TotalAmt" => $data['amount'],
+                "TxnDate" => $data['pay_date'],
+                "Line" => []
+            ]);
+
+            $resultingObj = $dataService->Add($theResourceObj);
+
+            if($resultingObj){
+                return $resultingObj;
+            }
+            else{
+                $error = $dataService->getLastError();
+                throw new Exception("Payment not added. Error: ".json_encode($error->getResponseBody()));
+                error_log("Payment not added. Error: ".json_encode($error->getResponseBody()));
+            }
         } 
         catch (\Throwable $th) {
             error_log($th->getMessage());
+            throw new Exception("An error. Error: ".json_encode($th->getMessage()));
         }
 
     }

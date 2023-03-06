@@ -35,14 +35,14 @@ class QBOCustomer{
 				"GivenName" => $customer->given_name,
 			]);	
 	
-			$resultObj = $dataService->Add($customerToCreate);
-			if($resultObj){
-				self::linkCustomerRecord($customer->id, $resultObj->Id);
-				return $resultObj->Id;
+			$resultingObj = $dataService->Add($customerToCreate);
+			if($resultingObj){
+				self::linkCustomerRecord($customer->id, $resultingObj->Id);
+				return $resultingObj->Id;
 			}
 			else{
 				$error = $dataService->getLastError();
-				throw new Exception("Customer not created. Error: ".json_encode($error));
+				throw new Exception("Customer not created. Error: ".json_encode($error->getResponseBody()));
 			}
 		} 
 		catch (\Throwable $th) {
